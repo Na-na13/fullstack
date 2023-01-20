@@ -5,7 +5,7 @@ sequenceDiagram
 	browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note
 	activate server
 	server-->>browser: Status 302 Redirect request
-	Note right of browser: The server sends redirect request to browser make automatically new HTTP GET request to the server
+	Note right of browser: The server sends redirect request for browser to make automatically new HTTP GET request to the server
 	deactivate server
 
 	browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
