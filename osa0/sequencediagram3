@@ -1,0 +1,11 @@
+sequenceDiagram
+	participant browser
+	participant server
+
+	browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+    	activate server
+    	Note right of browser: Browser send new note with JavaScript to server in JSON form (content and date).
+    	server-->>browser: 201 created
+    	deactivate server
+    	Note left of server: Server does not request redirect, but new note is rendered to page.
+    	Note right of browser: Any other requests is not needed.
