@@ -18,15 +18,24 @@ const App = () => {
 }
 
 const Statistics = ({good, neutral, bad}) => {
+  if(good + bad + neutral === 0){
+    return(
+      <p>
+        No feedback given
+      </p>
+    )
+  }
   return(
     <>
       <h1>statistics</h1>
-      good {good}<br/>
-      neutral {neutral}<br/>
-      bad {bad}<br/>
-      all {good+bad+neutral}<br/>
-      average {(good - bad)/(good+neutral+bad)}<br/>
-      positive {(good/(good+bad+neutral)*100)} %
+      <p>
+        good {good}<br/>
+        neutral {neutral}<br/>
+        bad {bad}<br/>
+        all {good + bad + neutral}<br/>
+        average {(good - bad)/(good + neutral + bad)}<br/>
+        positive {(good/(good + bad + neutral)*100)} %
+      </p>
     </>
   )
 }
