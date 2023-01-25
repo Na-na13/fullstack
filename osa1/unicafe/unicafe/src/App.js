@@ -6,11 +6,6 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
 
-  const increseGood = () => {
-    console.log('cliked good')
-    setGood(good + 1)
-  }
-
   return (
     <div>
       <h1>give feedback</h1>
@@ -27,6 +22,16 @@ const App = () => {
       <p>
         bad {bad}
       </p>
+      <p>
+        all {good+bad+neutral}
+      </p>
+      <p>
+        average {(good - bad)/(good+neutral+bad)}
+      </p>
+      <p>
+        positive {(good/(good+bad+neutral)*100)} %
+      </p>
+
     </div>
   )
 }
