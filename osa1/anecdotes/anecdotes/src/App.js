@@ -17,15 +17,27 @@ const App = () => {
   const handleVotes = () => {
     const votesCopy = [...votes]
     votesCopy[selected] += 1
+    if (votesCopy[selected] > votes[topVote]) {
+      setTopVote(selected)
+    }
     setVotes(votesCopy)
   }
+  const [topVote, setTopVote] = useState(0)
 
   return (
     <div>
-      {anecdotes[selected]}<br/>
-      <p>has {votes[selected]} votes</p>
-      <button onClick={handleVotes}>vote</button>
-      <button onClick={() => setSelected(randInt(anecdotes.length))}>next anecdote</button>
+      <div>
+        <h1>Anecdote of the Day</h1>
+        {anecdotes[selected]}<br />
+        <p>has {votes[selected]} votes</p>
+        <button onClick={handleVotes}>vote</button>
+        <button onClick={() => setSelected(randInt(anecdotes.length))}>next anecdote</button>
+      </div>
+      <div>
+        <h1>Anecdote with most votes</h1>
+        {anecdotes[topVote]}<br />
+        <p>has {votes[topVote]} votes</p>
+      </div>
     </div>
   )
 }
@@ -33,5 +45,17 @@ const App = () => {
 function randInt(max) {
   return Math.floor(Math.random() * max)
 }
+
+function topVoteIndex(votes) {
+  const topVote = Math.max(votes)
+  console.log(topVote)
+  console.log(votes.indexOf(topVote))
+  return votes.indexOf(topVote)
+}
+
+
+
+
+
 
 export default App
