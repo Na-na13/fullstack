@@ -39,13 +39,16 @@ const App = () => {
             setPersons(persons.concat(returnedPerson))
             setNewName('')
             setNewNumber('')
-            
           })
     }
   }
 
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value)
+  }
+
+  const handleNameChange = (event) => {
+    setNewName(event.target.value)
   }
 
   const handleFilterChange = (event) => {
@@ -58,13 +61,26 @@ const App = () => {
     } 
   }
 
+  const deletePerson = (event) => {
+    const destroyPerson = event.target.value
+    console.log(destroyPerson)
+    if (window.confirm(`Delete ${destroyPerson}?`)){
+      console.log('hyväksytään deletointi')
+      const destroyPersonId = persons.find(person => person.name === destroyPerson).id
+      console.log(destroyPersonId)
+      personService.deletePerson(destroyPersonId)
+      const phonebook = persons.filter(person => person.id !== destroyPersonId)
+      setPersons(phonebook)
+    } else {
+      console.log('deletointia ei hyväksytty')
+    }
+  }
+
   const personsToShow = showAll
     ? persons
     : persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
 
-  const handleNameChange = (event) => {
-    setNewName(event.target.value)
-  }
+
 
   return (
     <div>
@@ -73,7 +89,7 @@ const App = () => {
       <h3>Add new contact</h3>
       <PersonForm newName={newName} newNumber={newNumber} addPerson={addPerson} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
       <h3>Numbers</h3>
-      <Persons personsToShow={personsToShow} />
+      <Persons personsToShow={personsToShow} deletePerson={deletePerson} />
     </div>
   )
 }
