@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-//import axios from 'axios'
 
 import personService from './services/persons'
 import Filter from './Filter'
@@ -25,10 +24,23 @@ const App = () => {
     event.preventDefault()
     const personNamesLowerCase = persons.map(person => person.name.toLowerCase())
     if (personNamesLowerCase.includes(newName.toLowerCase())) {
-      alert(`${newName} is already added to phonebook`)
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+        const changePersonId = persons.find(person => person.name === newName).id
+        const personObject = {
+          name: newName,
+          number: newNumber,
+          id: changePersonId
+        }
+        personService.changeNumber(personObject)
+          .then(returnedPerson =>{
+            const phonebook = persons.filter(person => person.id !== returnedPerson.id)
+            setPersons(phonebook.concat(returnedPerson))
+            setNewName('')
+            setNewNumber('')
+          })
+      }
+
     } else {
-        console.log(newName)
-        console.log(newNumber)
         const personObject = {
           name: newName,
           number: newNumber
@@ -63,23 +75,17 @@ const App = () => {
 
   const deletePerson = (event) => {
     const destroyPerson = event.target.value
-    console.log(destroyPerson)
     if (window.confirm(`Delete ${destroyPerson}?`)){
-      console.log('hyväksytään deletointi')
       const destroyPersonId = persons.find(person => person.name === destroyPerson).id
-      console.log(destroyPersonId)
       personService.deletePerson(destroyPersonId)
       const phonebook = persons.filter(person => person.id !== destroyPersonId)
       setPersons(phonebook)
-    } else {
-      console.log('deletointia ei hyväksytty')
     }
   }
 
   const personsToShow = showAll
     ? persons
     : persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
-
 
 
   return (
