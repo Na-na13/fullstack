@@ -12,7 +12,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [showAll, setShowAll] = useState(true)
   const [filter, setFilter] = useState('')
-  const [notificationMessage, setMessage] = useState(null)
+  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -34,16 +35,27 @@ const App = () => {
           id: changePersonId
         }
         personService.changeNumber(personObject)
-          .then(returnedPerson =>{
+          .then(returnedPerson => {
             const phonebook = persons.filter(person => person.id !== returnedPerson.id)
             setPersons(phonebook.concat(returnedPerson))
             setNewName('')
             setNewNumber('')
+            setNotificationMessage(`Changed ${personObject.name}'s number.`)
+            setTimeout(() => {
+              setNotificationMessage(null)
+            }, 5000)
           })
-        setMessage(`Changed ${personObject.name}'s number`)
-        setTimeout(() => {
-          setMessage(null)
-        }, 5000)
+          .catch(error => {
+            setErrorMessage(`Information of ${personObject.name} has already been removed from the server.`)
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
+            const phonebook = persons.filter(person => person.id !== personObject.id)
+            setPersons(phonebook)
+            setNewName('')
+            setNewNumber('')
+          })
+
       }
 
     } else {
@@ -58,9 +70,9 @@ const App = () => {
             setNewName('')
             setNewNumber('')
           })
-        setMessage(`Added ${personObject.name}`)
+        setNotificationMessage(`Added ${personObject.name}.`)
         setTimeout(() => {
-          setMessage(null)
+          setNotificationMessage(null)
         }, 5000)
     }
   }
@@ -90,9 +102,9 @@ const App = () => {
       personService.deletePerson(destroyPersonId)
       const phonebook = persons.filter(person => person.id !== destroyPersonId)
       setPersons(phonebook)
-      setMessage(`Deleted ${destroyPerson}`)
+      setNotificationMessage(`Deleted ${destroyPerson}.`)
       setTimeout(() => {
-        setMessage(null)
+        setNotificationMessage(null)
       }, 5000)
     }
   }
@@ -101,7 +113,7 @@ const App = () => {
     ? persons
     : persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
 
-  const Message = ({message}) => {
+  const Notification = ({message}) => {
     if (message === null) {
       return null
     }
@@ -113,10 +125,23 @@ const App = () => {
     )
   }
 
+  const Error = ({message}) => {
+    if (message === null) {
+      return null
+    }
+
+    return(
+      <div className='error'>
+        {message}
+      </div>
+    )
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
-      <Message message={notificationMessage} />
+      <Notification message={notificationMessage} />
+      <Error message={errorMessage} />
       <Filter filter={filter} handleFilterChange={handleFilterChange}/>
       <h3>Add new contact</h3>
       <PersonForm newName={newName} newNumber={newNumber} addPerson={addPerson} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
