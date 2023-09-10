@@ -4,6 +4,7 @@ import personService from './services/persons'
 import Filter from './Filter'
 import PersonForm from './PersonForm'
 import Persons from './Persons'
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -11,6 +12,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [showAll, setShowAll] = useState(true)
   const [filter, setFilter] = useState('')
+  const [notificationMessage, setMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -38,6 +40,10 @@ const App = () => {
             setNewName('')
             setNewNumber('')
           })
+        setMessage(`Changed ${personObject.name}'s number`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
       }
 
     } else {
@@ -52,6 +58,10 @@ const App = () => {
             setNewName('')
             setNewNumber('')
           })
+        setMessage(`Added ${personObject.name}`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
     }
   }
 
@@ -80,6 +90,10 @@ const App = () => {
       personService.deletePerson(destroyPersonId)
       const phonebook = persons.filter(person => person.id !== destroyPersonId)
       setPersons(phonebook)
+      setMessage(`Deleted ${destroyPerson}`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     }
   }
 
@@ -87,10 +101,22 @@ const App = () => {
     ? persons
     : persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
 
+  const Message = ({message}) => {
+    if (message === null) {
+      return null
+    }
+
+    return(
+      <div className='message'>
+        {message}
+      </div>
+    )
+  }
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Message message={notificationMessage} />
       <Filter filter={filter} handleFilterChange={handleFilterChange}/>
       <h3>Add new contact</h3>
       <PersonForm newName={newName} newNumber={newNumber} addPerson={addPerson} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
