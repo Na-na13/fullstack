@@ -18,7 +18,6 @@ const App = () => {
 
   const handleOnChange = (event) => {
     setKeyword(event.target.value)
-    console.log(event.target.value)
   }
 
   const countriesToShow = keyword.length > 0 ? 
