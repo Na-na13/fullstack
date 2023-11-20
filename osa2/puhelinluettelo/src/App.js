@@ -6,6 +6,31 @@ import PersonForm from './PersonForm'
 import Persons from './Persons'
 import './index.css'
 
+
+const Notification = ({message}) => {
+  if (message === null) {
+    return null
+  }
+
+  return(
+    <div className='message'>
+      {message}
+    </div>
+  )
+}
+
+const Error = ({message}) => {
+  if (message === null) {
+    return null
+  }
+
+  return(
+    <div className='error'>
+      {message}
+    </div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
@@ -23,57 +48,87 @@ const App = () => {
       })
   }, [])
 
+  const updatePerson = () => {
+    if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+      const changePerson = persons.find(person => person.name === newName)
+      const personObject = {
+        ...changePerson,
+        number: newNumber
+      }
+      personService.changeNumber(personObject)
+        .then(returnedPerson => {
+          const phonebook = persons.map(person => person.id !== personObject.id ? person : returnedPerson)
+          setPersons(phonebook)
+          setNotificationMessage(`Changed ${personObject.name}'s number.`)
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 5000)
+        })
+        .catch(() => {
+          const phonebook = persons.filter(person => person.id !== personObject.id)
+          setPersons(phonebook)
+          setErrorMessage(`Information of ${personObject.name} has already been removed from the server.`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+
+        })
+      setNewName('')
+      setNewNumber('')
+
+    }
+  }
+
   const addPerson = (event) => {
     event.preventDefault()
     const personNamesLowerCase = persons.map(person => person.name.toLowerCase())
     if (personNamesLowerCase.includes(newName.toLowerCase())) {
-      if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
-        const changePersonId = persons.find(person => person.name === newName).id
-        const personObject = {
-          name: newName,
-          number: newNumber,
-          id: changePersonId
-        }
-        personService.changeNumber(personObject)
-          .then(returnedPerson => {
-            const phonebook = persons.filter(person => person.id !== returnedPerson.id)
-            setPersons(phonebook.concat(returnedPerson))
-            setNewName('')
-            setNewNumber('')
-            setNotificationMessage(`Changed ${personObject.name}'s number.`)
-            setTimeout(() => {
-              setNotificationMessage(null)
-            }, 5000)
-          })
-          .catch(error => {
-            setErrorMessage(`Information of ${personObject.name} has already been removed from the server.`)
-            setTimeout(() => {
-              setErrorMessage(null)
-            }, 5000)
-            const phonebook = persons.filter(person => person.id !== personObject.id)
-            setPersons(phonebook)
-            setNewName('')
-            setNewNumber('')
-          })
+      updatePerson()
+      return
+    }
 
-      }
-
-    } else {
-        const personObject = {
-          name: newName,
-          number: newNumber
-        }
-        personService
-          .addNewPerson(personObject)
-          .then(returnedPerson => {
-            setPersons(persons.concat(returnedPerson))
-            setNewName('')
-            setNewNumber('')
-          })
-        setNotificationMessage(`Added ${personObject.name}.`)
+    const personObject = {
+      name: newName,
+      number: newNumber
+    }
+    personService
+      .addNewPerson(personObject)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        setNewName('')
+        setNewNumber('')
+        setNotificationMessage(`Added ${returnedPerson.name}.`)
         setTimeout(() => {
           setNotificationMessage(null)
         }, 5000)
+      })
+      .catch(error => {
+        console.log(error)
+        setErrorMessage(`Name or number is missing.`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
+  }
+
+  const deletePerson = (event) => {
+    const destroy = event.target.value
+    if (window.confirm(`Delete ${destroy}?`)){
+      const destroyPerson = persons.find(person => person.name === destroy)
+      personService
+        .deletePerson(destroyPerson.id)
+        .then(() => {
+          const phonebook = persons.filter(person => person.id !== destroyPerson.id)
+          setPersons(phonebook)
+          setNotificationMessage(`Deleted ${destroyPerson.name}.`)
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 5000)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+
     }
   }
 
@@ -95,47 +150,10 @@ const App = () => {
     } 
   }
 
-  const deletePerson = (event) => {
-    const destroyPerson = event.target.value
-    if (window.confirm(`Delete ${destroyPerson}?`)){
-      const destroyPersonId = persons.find(person => person.name === destroyPerson).id
-      personService.deletePerson(destroyPersonId)
-      const phonebook = persons.filter(person => person.id !== destroyPersonId)
-      setPersons(phonebook)
-      setNotificationMessage(`Deleted ${destroyPerson}.`)
-      setTimeout(() => {
-        setNotificationMessage(null)
-      }, 5000)
-    }
-  }
-
   const personsToShow = showAll
     ? persons
     : persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
 
-  const Notification = ({message}) => {
-    if (message === null) {
-      return null
-    }
-
-    return(
-      <div className='message'>
-        {message}
-      </div>
-    )
-  }
-
-  const Error = ({message}) => {
-    if (message === null) {
-      return null
-    }
-
-    return(
-      <div className='error'>
-        {message}
-      </div>
-    )
-  }
 
   return (
     <div>
