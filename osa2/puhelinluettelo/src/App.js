@@ -64,13 +64,22 @@ const App = () => {
             setNotificationMessage(null)
           }, 5000)
         })
-        .catch(() => {
-          const phonebook = persons.filter(person => person.id !== personObject.id)
-          setPersons(phonebook)
-          setErrorMessage(`Information of ${personObject.name} has already been removed from the server.`)
-          setTimeout(() => {
-            setErrorMessage(null)
-          }, 5000)
+        .catch((error) => {
+          console.log(error)
+          if (error.response.data.error.includes("Validation")) {
+            setErrorMessage(error.response.data.error)
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
+          } else {
+            const phonebook = persons.filter(person => person.id !== personObject.id)
+            console.log(phonebook)
+            setPersons(phonebook)
+            setErrorMessage(`Information of ${personObject.name} has already been removed from the server.`)
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000)
+          }
 
         })
       setNewName('')
