@@ -75,6 +75,14 @@ const App = () => {
     }
   }
 
+  const updateBlog = async (blogObject) => {
+    try {
+      await blogService.like(blogObject)
+    } catch (exeption) {
+      notify(exeption.response.data.error, 'error')
+    }
+  }
+
 
   if (user === null) {
     return (
@@ -115,7 +123,7 @@ const App = () => {
         <BlogForm createBlog={createBlog} />
       </Togglable>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} like={updateBlog} />
       )}
     </div>
   )

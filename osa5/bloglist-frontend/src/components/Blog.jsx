@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, like }) => {
   const [visibility, setVisibility] = useState(false)
   const buttonText = visibility ? "hide" : "view"
 
@@ -10,6 +10,15 @@ const Blog = ({ blog }) => {
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5
+  }
+
+  const addLike = () => {
+    console.log(blog)
+    const likes = blog.likes + 1
+    like({
+      id: blog.id,
+      likes: likes
+    })
   }
 
   if (!visibility) {
@@ -24,7 +33,7 @@ const Blog = ({ blog }) => {
         {blog.title} <button onClick={() => setVisibility(!visibility)}>{buttonText}</button> <br/>
         {blog.author}<br/>
         {blog.url}<br/>
-        {blog.likes} <button>like</button><br/>
+        {blog.likes} <button onClick={addLike}>like</button><br/>
         {blog.user ? `Added by ${blog.user.username}` : ""}
       </div>
     )
