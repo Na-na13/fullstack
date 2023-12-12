@@ -76,6 +76,7 @@ const App = () => {
   }
 
   const updateBlog = async (blogObject) => {
+    console.log(user)
     try {
       await blogService.like(blogObject)
     } catch (exeption) {
@@ -83,6 +84,17 @@ const App = () => {
     }
   }
 
+  const removeBlog = async (blogObject) => {
+    if (window.confirm(`Remove ${blogObject.title} by ${blogObject.author}?`)){
+      try {
+        await blogService.remove(blogObject)
+        notify(`removed ${blogObject.title} by ${blogObject.author}`)
+      } catch (exeption) {
+        console.log(exeption)
+        notify(exeption.response.data.error, 'error')
+      }
+    }
+  }
 
   if (user === null) {
     return (
@@ -125,7 +137,7 @@ const App = () => {
       {blogs
         .sort((a, b) => b.likes - a.likes)
         .map(blog =>
-          <Blog key={blog.id} blog={blog} like={updateBlog} />
+          <Blog key={blog.id} blog={blog} like={updateBlog} remove={removeBlog} currentUser={user} />
         )}
     </div>
   )
