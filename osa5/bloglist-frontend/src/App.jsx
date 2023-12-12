@@ -17,7 +17,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [blogs])
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const App = () => {
     })
 
     setTimeout(() => {
-      setInfo({ message: null} )
+      setInfo({ message: null } )
     }, 5000)
   }
 
@@ -104,20 +104,20 @@ const App = () => {
         <form onSubmit={handleLogin}>
           <div>
             username
-              <input
+            <input
               type='text'
               value={username}
               name='Username'
               onChange={({ target }) => setUsername(target.value)}
-              />
+            />
           </div>
           <div>
             password
             <input
-            type='password'
-            value={password}
-            name='Password'
-            onChange={({ target }) => setPassword(target.value)}
+              type='password'
+              value={password}
+              name='Password'
+              onChange={({ target }) => setPassword(target.value)}
             />
           </div>
           <button type='submit'>login</button>
