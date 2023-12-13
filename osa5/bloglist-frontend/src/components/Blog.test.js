@@ -25,3 +25,32 @@ test('renders blog title', () => {
   expect(element).toBeDefined()
 
 })
+
+test('show all blog info when button is clicked', async () => {
+  const currentUser = {
+    token: 'token',
+    username: 'username'
+  }
+
+  const blog = {
+    title: 'Blog about testing code',
+    author: 'Master coder',
+    url: "blog's url",
+    likes: 0,
+    user: currentUser
+  }
+
+  const mockLike = jest.fn()
+  const mockRemove = jest.fn()
+
+  render(<Blog blog={blog} like={mockLike} remove={mockRemove} currentUser={currentUser} />)
+
+  const user = userEvent.setup()
+  const button = screen.getByText('view')
+  await user.click(button)
+
+  expect(await screen.findByText('Master coder', { exact:false })).toBeVisible()
+  expect(await screen.findByText("blog's url", { exact:false })).toBeVisible()
+  expect(await screen.findByText('0', { exact: false })).toBeVisible()
+  expect(await screen.findByText('Added by username', { exact: false })).toBeVisible()
+})
