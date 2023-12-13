@@ -3,18 +3,19 @@ module.exports = {
   env: {
     browser: true,
     es2020: true,
-    //"jest/globals": true
+    'jest/globals': true,
   },
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended',
+    'plugin:jest-dom/recommended'
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   settings: { react: { version: '18.2' } },
-  plugins: ['react-refresh'],
+  plugins: ['react-refresh', 'jest-dom'],
   rules: {
     'indent': [
       'error',
@@ -50,5 +51,9 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
+    'jest-dom/prefer-checked': 'error',
+    'jest-dom/prefer-enabled-disabled': 'error',
+    'jest-dom/prefer-required': 'error',
+    'jest-dom/prefer-to-have-attribute': 'error',
   },
 }
