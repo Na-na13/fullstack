@@ -22,8 +22,8 @@ test("BlogForm's callback function is called with correct props when blog is cre
 
   expect(mockCreateBlog.mock.calls).toHaveLength(1)
   expect(mockCreateBlog).toHaveBeenCalledWith({
-      title: 'A blog about testing',
-      author: 'Master coder',
-      url: 'url of the blog'
+    title: 'A blog about testing',
+    author: 'Master coder',
+    url: 'url of the blog'
   })
 })

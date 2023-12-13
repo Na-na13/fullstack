@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
 
-describe('After the blog element is rendered,', () =>{
+describe('After the blog element is rendered,', () => {
   const mockLike = jest.fn()
   const mockRemove = jest.fn()
 
@@ -13,7 +13,7 @@ describe('After the blog element is rendered,', () =>{
       token: 'token',
       username: 'username'
     }
-  
+
     const blog = {
       title: 'Blog about testing code',
       author: 'Master coder',
@@ -21,13 +21,13 @@ describe('After the blog element is rendered,', () =>{
       likes: 0,
       user: currentUser
     }
-  
+
     render(<Blog blog={blog} like={mockLike} remove={mockRemove} currentUser={currentUser} />)
   })
 
   test('the blog title is shown', () => {
     const element = screen.getByText('Blog about testing code')
-    expect(element).toBeDefined()
+    expect(element).toBeInTheDocument()
 
   })
 
