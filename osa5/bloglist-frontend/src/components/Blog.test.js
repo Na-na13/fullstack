@@ -54,3 +54,31 @@ test('show all blog info when button is clicked', async () => {
   expect(await screen.findByText('0', { exact: false })).toBeVisible()
   expect(await screen.findByText('Added by username', { exact: false })).toBeVisible()
 })
+
+test('like button can be clicked', async () => {
+  const blog = {
+    title: "Blog about testing code",
+    author: "Master coder",
+    url: "blog's url"
+  }
+
+  const currentUser = {
+    token: "token",
+    username: "username"
+  }
+
+  const mockLike = jest.fn()
+  const mockRemove = jest.fn()
+
+  render(<Blog blog={blog} like={mockLike} remove={mockRemove} currentUser={currentUser} />)
+
+  const user = userEvent.setup()
+  const viewButton = screen.getByText('view')
+  await user.click(viewButton)
+
+  const likeButton = screen.getByText('like')
+  await user.click(likeButton)
+  await user.click(likeButton)
+
+  expect(mockLike.mock.calls).toHaveLength(2)
+})
