@@ -18,7 +18,7 @@ const App = () => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )
-  }, [blogs])
+  }, [])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
@@ -68,7 +68,9 @@ const App = () => {
   const createBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
     try {
-      await blogService.create(blogObject)
+      const newBlog = await blogService.create(blogObject)
+      setBlogs(blogs.concat(newBlog))
+      console.log('create', newBlog)
       notify(`a new blog ${blogObject.title} by ${blogObject.author} added`)
     } catch (exeption) {
       notify(exeption.response.data.error, 'error')
@@ -88,6 +90,7 @@ const App = () => {
     if (window.confirm(`Remove ${blogObject.title} by ${blogObject.author}?`)){
       try {
         await blogService.remove(blogObject)
+        setBlogs(blogs.filter(b => b.id !== blogObject.id))
         notify(`removed ${blogObject.title} by ${blogObject.author}`)
       } catch (exeption) {
         console.log(exeption)

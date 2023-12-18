@@ -39,7 +39,7 @@ const Blog = ({ blog, like, remove, currentUser }) => {
     )
   } else {
     return(
-      <div style={blogStyle}>
+      <div key={blog.id} style={blogStyle}>
         {blog.title} <button onClick={() => setVisibility(!visibility)}>{buttonText}</button> <br/>
         {blog.author}<br/>
         {blog.url}<br/>
