@@ -53,4 +53,37 @@ describe('Blog app', function() {
       cy.contains('On Test Automation')
     })
   })
+
+  describe('When a blog is created,', function() {
+    beforeEach(function() {
+      cy.get('form').within(() => {
+        cy.get('#username').type('testuser')
+        cy.get('#password').type('password')
+        cy.get('#login-button').click()
+      })
+      cy.contains('new blog').click()
+      cy.get('form').within(() => {
+        cy.get('#title').type('On Test Automation')
+        cy.get('#author').type('Bas Dijkstra')
+        cy.get('#url').type('https://www.ontestautomation.com/')
+        cy.contains('create').click()
+      })
+    })
+    it('it can be liked', function() {
+      cy.contains('view').click()
+      cy.contains('0 likes')
+      cy.get('button').contains('like').click()
+      cy.contains('1 like')
+    })
+    //TODO
+    it('user who created the blog can remove the blog', function() {
+      //cy.get('.blog').within(() => {
+      cy.reload()
+      cy.contains('view').click()
+      cy.contains('remove').click()
+      cy.on('window:confirm', () => true)
+      //})
+      cy.contains('On Test Automation').should('not.exists')
+    })
+  })
 })

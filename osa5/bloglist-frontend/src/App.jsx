@@ -78,9 +78,10 @@ const App = () => {
   }
 
   const updateBlog = async (blogObject) => {
-    console.log(user)
+    console.log(blogObject)
     try {
-      await blogService.like(blogObject)
+      const updatedBlog = await blogService.like(blogObject)
+      setBlogs(blogs.map(blog => blog.id !== updatedBlog.id ? blog : updatedBlog))
     } catch (exeption) {
       notify(exeption.response.data.error, 'error')
     }

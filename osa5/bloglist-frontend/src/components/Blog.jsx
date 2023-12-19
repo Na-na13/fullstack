@@ -1,3 +1,4 @@
+import pluralize from 'pluralize'
 import { useState } from 'react'
 import PropTypes from 'prop-types'
 
@@ -39,11 +40,11 @@ const Blog = ({ blog, like, remove, currentUser }) => {
     )
   } else {
     return(
-      <div key={blog.id} style={blogStyle}>
+      <div key={blog.id} className='blog' style={blogStyle}>
         {blog.title} <button onClick={() => setVisibility(!visibility)}>{buttonText}</button> <br/>
         {blog.author}<br/>
         {blog.url}<br/>
-        {blog.likes} <button onClick={addLike}>like</button><br/>
+        {pluralize('like', blog.likes, true)} <button onClick={addLike}>like</button><br/>
         {blog.user ? `Added by ${blog.user.username}` : ''}<br />
         {blog.user && currentUser.username === blog.user.username ? <button onClick={removeBlog}>remove</button> : ''}
       </div>
