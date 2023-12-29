@@ -25,6 +25,7 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
+      blogService.setToken(user.token)
     }
   }, [])
 
@@ -40,13 +41,10 @@ const App = () => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    console.log('logging in', username, password)
-
     try {
       const user = await loginService.login({
         username, password
       })
-      console.log(user)
       window.localStorage.setItem(
         'loggedBloglistUser', JSON.stringify(user)
       )
@@ -60,8 +58,8 @@ const App = () => {
   }
 
   const handleLogout = async (event) => {
-    console.log('logginout')
     setUser(null)
+    blogService.setToken(null)
     window.localStorage.removeItem('loggedBloglistUser')
   }
 
@@ -70,7 +68,6 @@ const App = () => {
     try {
       const newBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(newBlog))
-      console.log('create', newBlog)
       notify(`a new blog ${blogObject.title} by ${blogObject.author} added`)
     } catch (exeption) {
       notify(exeption.response.data.error, 'error')
@@ -78,7 +75,6 @@ const App = () => {
   }
 
   const updateBlog = async (blogObject) => {
-    console.log(blogObject)
     try {
       const updatedBlog = await blogService.like(blogObject)
       setBlogs(blogs.map(blog => blog.id !== updatedBlog.id ? blog : updatedBlog))
@@ -94,7 +90,6 @@ const App = () => {
         setBlogs(blogs.filter(b => b.id !== blogObject.id))
         notify(`removed ${blogObject.title} by ${blogObject.author}`)
       } catch (exeption) {
-        console.log(exeption)
         notify(exeption.response.data.error, 'error')
       }
     }

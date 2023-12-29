@@ -75,15 +75,13 @@ describe('Blog app', function() {
       cy.get('button').contains('like').click()
       cy.contains('1 like')
     })
-    //TODO
     it('user who created the blog can remove the blog', function() {
-      //cy.get('.blog').within(() => {
       cy.reload()
       cy.contains('view').click()
       cy.contains('remove').click()
       cy.on('window:confirm', () => true)
-      //})
-      cy.contains('On Test Automation').should('not.exists')
+      cy.wait(5000) // wait for Notification not to exist
+      cy.contains('On Test Automation').should('not.exist')
     })
   })
 })
