@@ -81,7 +81,18 @@ describe('Blog app', function() {
       cy.contains('remove').click()
       cy.on('window:confirm', () => true)
       cy.wait(5000) // wait for Notification not to exist
+      //cy.get('.notification', { timeout: 5000 }).should('not.exist')
       cy.contains('On Test Automation').should('not.exist')
+    })
+    it('the remove button is visible only for user who created the blog', function() {
+      cy.get('button'). contains('logout').click()
+      cy.get('form').within(() => {
+        cy.get('#username').type('anotherUser')
+        cy.get('#password').type('password')
+        cy.get('#login-button').click()
+      })
+      cy.contains('view').click()
+      cy.get('button').contains('remove').should('not.exist')
     })
   })
 })
