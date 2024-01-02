@@ -34,13 +34,13 @@ const Blog = ({ blog, like, remove, currentUser }) => {
 
   if (!visibility) {
     return(
-      <div style={blogStyle}>
+      <div className='blog' style={blogStyle}>
         {blog.title} <button onClick={() => setVisibility(!visibility)}>{buttonText}</button>
       </div>
     )
   } else {
     return(
-      <div key={blog.id} className='blog' style={blogStyle}>
+      <div className='blog' style={blogStyle}>
         {blog.title} <button onClick={() => setVisibility(!visibility)}>{buttonText}</button> <br/>
         {blog.author}<br/>
         {blog.url}<br/>

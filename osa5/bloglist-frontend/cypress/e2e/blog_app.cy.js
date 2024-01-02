@@ -94,5 +94,24 @@ describe('Blog app', function() {
       cy.contains('view').click()
       cy.get('button').contains('remove').should('not.exist')
     })
+    it('blogs are sorted by the number of likes', function() {
+      cy.contains('new blog').click()
+      cy.get('form').within(() => {
+        cy.get('#title').type('DevelopSense')
+        cy.get('#author').type('Michael Bolton')
+        cy.get('#url').type('https://developsense.com/')
+        cy.contains('create').click()
+      })
+      cy.get('.blog').eq(0).contains('On Test Automation')
+      cy.get('.blog').eq(1).contains('DevelopSense')
+
+      cy.get('.blog').eq(1).within(() => {
+        cy.contains('view').click()
+        cy.get('button').contains('like').click()
+      })
+      cy.get('.blog').eq(0).contains('DevelopSense')
+      cy.get('.blog').eq(1).contains('On Test Automation')
+
+    })
   })
 })
