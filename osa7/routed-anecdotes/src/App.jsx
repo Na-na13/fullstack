@@ -75,6 +75,11 @@ const CreateNew = (props) => {
     })
   }
 
+  const inputValues = (field) => {
+    const {reset, ...input} = field
+    return input
+  }
+
   const handleReset = () => {
     content.reset()
     author.reset()
@@ -87,15 +92,15 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input {...content} />
+          <input {...inputValues(content)} />
         </div>
         <div>
           author
-          <input {...author} />
+          <input {...inputValues(author)} />
         </div>
         <div>
           url for more info
-          <input {...info} />
+          <input {...inputValues(info)} />
         </div>
         <button type='submit'>create</button>
         <button type='reset' onClick={handleReset}>reset</button>
