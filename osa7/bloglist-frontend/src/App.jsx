@@ -6,13 +6,19 @@ import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 
+import { createNotification } from './reducers/notificationReducer'
+import { useSelector, useDispatch } from 'react-redux'
+
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [info, setInfo] = useState({ message: null })
   const blogFormRef = useRef()
+
+
+  const dispatch = useDispatch()
+  const info = useSelector(state => state)
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -27,17 +33,6 @@ const App = () => {
     }
   }, [])
 
-  const notify = (message, type = 'info') => {
-    setInfo({
-      message,
-      type,
-    })
-
-    setTimeout(() => {
-      setInfo({ message: null })
-    }, 5000)
-  }
-
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -51,7 +46,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exeption) {
-      notify(exeption.response.data.error, 'error')
+      dispatch(createNotification('ERROR', exeption.response.data.error))
     }
   }
 
@@ -66,9 +61,9 @@ const App = () => {
     try {
       const newBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(newBlog))
-      notify(`a new blog ${blogObject.title} by ${blogObject.author} added`)
+      dispatch(createNotification('INFO', `a new blog ${blogObject.title} by ${blogObject.author} added`))
     } catch (exeption) {
-      notify(exeption.response.data.error, 'error')
+      dispatch(createNotification('ERROR', exeption.response.data.error))
     }
   }
 
@@ -79,7 +74,7 @@ const App = () => {
         blogs.map((blog) => (blog.id !== updatedBlog.id ? blog : updatedBlog)),
       )
     } catch (exeption) {
-      notify(exeption.response.data.error, 'error')
+      dispatch(createNotification('ERROR', exeption.response.data.error))
     }
   }
 
@@ -88,9 +83,9 @@ const App = () => {
       try {
         await blogService.remove(blogObject)
         setBlogs(blogs.filter((b) => b.id !== blogObject.id))
-        notify(`removed ${blogObject.title} by ${blogObject.author}`)
+        dispatch(createNotification('INFO', `removed ${blogObject.title} by ${blogObject.author}`))
       } catch (exeption) {
-        notify(exeption.response.data.error, 'error')
+        dispatch(createNotification('ERROR', exeption.response.data.error))
       }
     }
   }
@@ -99,7 +94,7 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
-        <Notification info={info} />
+        <Notification />
         <form onSubmit={handleLogin}>
           <div>
             username
@@ -132,7 +127,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <Notification info={info} />
+      <Notification />
       <p>
         {user.username} is logged in{' '}
         <button onClick={handleLogout}>logout</button>
