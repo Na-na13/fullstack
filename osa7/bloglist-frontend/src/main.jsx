@@ -1,14 +1,21 @@
 import ReactDOM from 'react-dom/client'
-import { createStore } from 'redux'
+import { configureStore } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
 import App from './App'
 
 import notificationReducer from './reducers/notificationReducer'
+import blogReducer from './reducers/blogReducer'
 
-const store = createStore(notificationReducer)
+const store = configureStore({
+  reducer: {
+    notifications: notificationReducer,
+    blogs: blogReducer
+  }
+})
 
 store.subscribe(() => {
-  if (store.getState()) {
+  const { notifications } = store.getState()
+  if (notifications) {
     setTimeout(() => {
       store.dispatch({ type: 'EMPTY' })
     }, 5000)

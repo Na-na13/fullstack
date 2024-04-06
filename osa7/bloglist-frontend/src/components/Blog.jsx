@@ -2,7 +2,8 @@ import pluralize from 'pluralize'
 import { useState } from 'react'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, like, remove, currentUser }) => {
+// const Blog = ({ blog, like, remove, currentUser }) => {
+const Blog = ({ blog, currentUser }) => {
   const [visibility, setVisibility] = useState(false)
   const buttonText = visibility ? 'hide' : 'view'
 
@@ -14,7 +15,7 @@ const Blog = ({ blog, like, remove, currentUser }) => {
     marginBottom: 5,
   }
 
-  const addLike = () => {
+  /*const addLike = () => {
     console.log(blog)
     const likes = blog.likes + 1
     like({
@@ -30,7 +31,7 @@ const Blog = ({ blog, like, remove, currentUser }) => {
       author: blog.author,
       user: blog.user,
     })
-  }
+  }*/
 
   if (!visibility) {
     return (
@@ -50,12 +51,12 @@ const Blog = ({ blog, like, remove, currentUser }) => {
         {blog.url}
         <br />
         {pluralize('like', blog.likes, true)}{' '}
-        <button onClick={addLike}>like</button>
+        <button disabled>like</button>
         <br />
         {blog.user ? `Added by ${blog.user.username}` : ''}
         <br />
         {blog.user && currentUser.username === blog.user.username ? (
-          <button onClick={removeBlog}>remove</button>
+          <button disabled>remove</button>
         ) : (
           ''
         )}
@@ -66,8 +67,8 @@ const Blog = ({ blog, like, remove, currentUser }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  like: PropTypes.func.isRequired,
-  remove: PropTypes.func.isRequired,
+  //like: PropTypes.func.isRequired,
+  //remove: PropTypes.func.isRequired,
   currentUser: PropTypes.object.isRequired,
 }
 

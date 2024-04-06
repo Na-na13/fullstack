@@ -1,26 +1,26 @@
-// Reducer
-const notificationReducer = (state = null, action) => {
-  console.log(action)
-  switch (action.type) {
-  case 'INFO':
-    return action
-  case 'ERROR':
-    return action
-  case 'EMPTY':
-    return null
-  default:
-    return state
-  }
-}
+import { createSlice } from '@reduxjs/toolkit'
 
-// Action creator
-export const createNotification = (type, content) => {
-  return {
-    type: type,
-    payload: {
-      content: content,
+const initialState = ''
+
+const notificationSlice = createSlice({
+  name: 'notifications',
+  initialState,
+  reducers: {
+    showNotification(state, action) {
+      return action.payload
     }
   }
+})
+
+export const { showNotification } = notificationSlice.actions
+
+export const createNotification = (type, message) => {
+  return dispatch => {
+    dispatch(showNotification({ content: message, type: type }))
+    setTimeout(() => {
+      dispatch(showNotification(''))
+    }, (5000))
+  }
 }
 
-export default notificationReducer
+export default notificationSlice.reducer

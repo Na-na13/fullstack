@@ -12,6 +12,7 @@
     "cypress:open": "cypress open"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.2.3",
     "axios": "^1.4.0",
     "pluralize": "^8.0.0",
     "prop-types": "^15.8.1",
