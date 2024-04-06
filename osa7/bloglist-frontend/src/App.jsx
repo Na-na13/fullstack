@@ -12,7 +12,6 @@ import { initializeBlogs } from './reducers/blogReducer'
 
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -56,29 +55,6 @@ const App = () => {
     setUser(null)
     blogService.setToken(null)
     window.localStorage.removeItem('loggedBloglistUser')
-  }
-
-  const updateBlog = async (blogObject) => {
-    try {
-      const updatedBlog = await blogService.like(blogObject)
-      setBlogs(
-        blogs.map((blog) => (blog.id !== updatedBlog.id ? blog : updatedBlog)),
-      )
-    } catch (exeption) {
-      dispatch(createNotification('ERROR', exeption.response.data.error))
-    }
-  }
-
-  const removeBlog = async (blogObject) => {
-    if (window.confirm(`Remove ${blogObject.title} by ${blogObject.author}?`)) {
-      try {
-        await blogService.remove(blogObject)
-        setBlogs(blogs.filter((b) => b.id !== blogObject.id))
-        dispatch(createNotification('INFO', `removed ${blogObject.title} by ${blogObject.author}`))
-      } catch (exeption) {
-        dispatch(createNotification('ERROR', exeption.response.data.error))
-      }
-    }
   }
 
   if (user === null) {

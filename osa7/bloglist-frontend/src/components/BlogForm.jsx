@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { createBlog } from '../reducers/blogReducer'
 import { createNotification } from '../reducers/notificationReducer'
 import { useDispatch } from 'react-redux'
-import { useRef } from 'react'
 
 
 const BlogForm = () => {

@@ -13,8 +13,6 @@ const BlogList = ({ currentUser }) => {
           <Blog
             key={blog.id}
             blog={blog}
-            //like={updateBlog}
-            //remove={removeBlog}
             currentUser={currentUser}
           />
         ))
