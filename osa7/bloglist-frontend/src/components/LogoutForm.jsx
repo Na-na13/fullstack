@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { logoutUser } from '../reducers/userReducer'
 
 const LogoutForm = () => {
-  const user = useSelector(state => state.users)
+  const user = useSelector(state => state.users.loggedInUser)
   const dispatch = useDispatch()
 
   const handleLogout = async (event) => {

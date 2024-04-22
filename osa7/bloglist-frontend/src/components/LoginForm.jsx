@@ -11,10 +11,11 @@ const LoginForm = () => {
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      dispatch(loginUser(username, password))
+      await dispatch(loginUser(username, password))
       setUsername('')
       setPassword('')
     } catch (exeption) {
+      setPassword('')
       dispatch(createNotification('ERROR', exeption.response.data.error))
     }
   }

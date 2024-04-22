@@ -5,26 +5,15 @@ import BlogList from './components/BlogList'
 import LoginForm from './components/LoginForm'
 import LogoutForm from './components/LogoutForm'
 import Togglable from './components/Togglable'
+import Users from './components/Users'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
-import { loggedUser } from './reducers/userReducer'
+import { getAllUsers, loggedUser } from './reducers/userReducer'
+import { Routes, Route } from 'react-router-dom'
 
-
-const App = () => {
-  const user = useSelector(state => state.users)
-  const dispatch = useDispatch()
+const Home = ({ user }) => {
   const blogFormRef = useRef()
-
-  useEffect(() => {
-    dispatch(initializeBlogs())
-  }, [])
-
-  useEffect(() => {
-    dispatch(loggedUser())
-  }, [])
-
-
   if (user === null) {
     return (
       <div>
@@ -45,6 +34,31 @@ const App = () => {
       </Togglable>
       <BlogList currentUser={user}/>
     </div>
+  )
+}
+
+const App = () => {
+  const user = useSelector(state => state.users.loggedInUser)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(initializeBlogs())
+  }, [])
+
+  useEffect(() => {
+    dispatch(loggedUser())
+  }, [])
+
+  useEffect(() => {
+    dispatch(getAllUsers())
+  }, [])
+
+
+  return (
+    <Routes>
+      <Route path='/' element={<Home user={user} />} />
+      <Route path='/users' element={<Users />} />
+    </Routes>
   )
 }
 
