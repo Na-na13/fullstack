@@ -6,6 +6,7 @@ import LoginForm from './components/LoginForm'
 import LogoutForm from './components/LogoutForm'
 import Togglable from './components/Togglable'
 import Users from './components/Users'
+import User from './components/User'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
@@ -39,6 +40,7 @@ const Home = ({ user }) => {
 
 const App = () => {
   const user = useSelector(state => state.users.loggedInUser)
+  const users = useSelector(state => state.users.allUsers)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -58,6 +60,7 @@ const App = () => {
     <Routes>
       <Route path='/' element={<Home user={user} />} />
       <Route path='/users' element={<Users />} />
+      <Route path='/users/:id' element={<User users={users} />} />
     </Routes>
   )
 }
