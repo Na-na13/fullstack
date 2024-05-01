@@ -17,7 +17,6 @@ const BlogForm = () => {
       dispatch(createBlog(title, author, url))
       dispatch(createNotification('INFO', `a new blog ${title} by ${author} added`))
     } catch (exeption) {
-      console.log(exeption)
       dispatch(createNotification('ERROR', exeption.response.data.error))
     }
     setTitle('')

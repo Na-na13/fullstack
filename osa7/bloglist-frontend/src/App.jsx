@@ -47,16 +47,13 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeBlogs())
-  }, [])
-
-  useEffect(() => {
+    dispatch(getAllUsers())
     dispatch(loggedUser())
   }, [])
 
-  useEffect(() => {
-    dispatch(getAllUsers())
-  }, [])
-
+  if(!user) {
+    return null
+  }
 
   return (
     <Routes>

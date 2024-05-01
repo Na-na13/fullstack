@@ -1,3 +1,4 @@
+import CommentForm from './CommentForm'
 import LogoutForm from './LogoutForm'
 import { likeBlog, removingBlog } from '../reducers/blogReducer'
 import { createNotification } from '../reducers/notificationReducer'
@@ -15,7 +16,6 @@ const Blog = ({ currentUser }) => {
   const blog = blogs.find(blog => blog.id === id)
 
   const updateBlog = async (event) => {
-    console.log(blog)
     try {
       const likes = blog.likes + 1
       dispatch(likeBlog(blog.id, likes))
@@ -58,10 +58,11 @@ const Blog = ({ currentUser }) => {
         ) : (
           ''
         )}
+        <CommentForm blog={blog} />
         <h4>comments</h4>
         <ul>
-          {blog.comments.map(comment => (
-            <li>{comment}</li>
+          {blog.comments.map((comment, index) => (
+            <li key={blog.id + index}>{comment}</li>
           ))}
         </ul>
       </div>
