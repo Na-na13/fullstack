@@ -10,7 +10,6 @@ const User = ({ users }) => {
   return (
     <div>
       <h2>blogs</h2>
-      <LogoutForm />
       <h2>{user.username}</h2>
       <h3>added blogs</h3>
       <ul>

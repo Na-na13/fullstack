@@ -10,10 +10,10 @@ const LogoutForm = () => {
   }
 
   return (
-    <p>
+    <>
       {user.username} is logged in{' '}
       <button onClick={handleLogout}>logout</button>
-    </p>
+    </>
   )
 }
 

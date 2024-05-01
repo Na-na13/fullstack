@@ -43,7 +43,6 @@ const Blog = ({ currentUser }) => {
     return (
       <div>
         <h2>blogs</h2>
-        <LogoutForm />
         <h2>{blog.title}</h2>
         <h4>{blog.author}</h4>
         <a href={blog.url}>{blog.url}</a>
