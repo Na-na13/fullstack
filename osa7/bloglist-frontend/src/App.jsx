@@ -14,6 +14,14 @@ import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Routes, Route, Link, Navigate } from 'react-router-dom'
 
+import Container from '@mui/material/Container'
+import AppBar from '@mui/material/AppBar'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import EditNoteIcon from '@mui/icons-material/EditNote'
+import LoginIcon from '@mui/icons-material/Login'
+import PeopleIcon from '@mui/icons-material/People'
+
 const Home = () => {
   const blogFormRef = useRef()
   return (
@@ -49,17 +57,39 @@ const App = () => {
     dispatch(loggedUser())
   }, [])
 
-  const padding = {
-    padding: 5
+  const linkstyle = {
+    padding: 5,
+    textDecoration: 'none',
+    underline: 'hover',
+    color: '#ffffff'
+  }
+
+  const buttonstyle = {
+    color: '#ffffff',
+    padding: 10,
+    margin: 5
   }
 
   return (
     <>
-      <div>
-        <Link style={padding} to="/">blogs</Link>
-        <Link style={padding} to="/users">users</Link>
-        {user ? <LogoutForm /> : <Link style={padding} to='/login'>login</Link>}
-      </div>
+      <Container>
+        <AppBar position='static'>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Button variant='text' endIcon={<EditNoteIcon />} style={buttonstyle}>
+              <Link style={linkstyle} to="/">blogs</Link>
+            </Button>
+            <Button variant='text' endIcon={<PeopleIcon />} style={buttonstyle}>
+              <Link style={linkstyle} to="/users">users</Link>
+            </Button>
+            {user ?
+              <LogoutForm /> :
+              <Button variant='text' endIcon={<LoginIcon />} style={buttonstyle}>
+                <Link style={linkstyle} to='/login'>login</Link>
+              </Button>
+            }
+          </Box>
+        </AppBar>
+      </Container>
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/users' element={user ? <Users /> : <Navigate replace to='/login' />} />
