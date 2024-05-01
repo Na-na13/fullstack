@@ -3,6 +3,11 @@ import { useDispatch } from 'react-redux'
 import { loginUser } from '../reducers/userReducer'
 import { createNotification } from '../reducers/notificationReducer'
 
+import TextField from '@mui/material/TextField'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import { FormControl, FormLabel, Typography } from '@mui/material'
+
 const LoginForm = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -21,31 +26,36 @@ const LoginForm = () => {
   }
 
   return (
-    <form onSubmit={handleLogin}>
-      <div>
-        username
-        <input
-          id='username'
-          type='text'
-          value={username}
-          name='Username'
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        password
-        <input
-          id='password'
-          type='password'
-          value={password}
-          name='Password'
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button id='login-button' type='submit'>
-        login
-      </button>
-    </form>
+    <>
+      <Typography sx={{ display:'flex', alignItems:'center', justifyContent:'center' }}>
+        <h2>Log in to application</h2>
+      </Typography>
+      <Box sx={{ display:'flex', alignItems:'center', justifyContent:'center' }}>
+        <form  onSubmit={handleLogin}>
+          <FormControl>
+            <FormLabel>Userame</FormLabel>
+            <TextField
+              id='username'
+              type='text'
+              value={username}
+              name='Username'
+              size='small'
+              onChange={({ target }) => setUsername(target.value)}
+            />
+            <FormLabel>Password</FormLabel>
+            <TextField
+              id='password'
+              type='password'
+              value={password}
+              name='Password'
+              size='small'
+              onChange={({ target }) => setPassword(target.value)}
+            />
+            <Button type='submit'>Login</Button>
+          </FormControl>
+        </form>
+      </Box>
+    </>
   )
 }
 
